@@ -1,0 +1,52 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  TAG: $CI_BUILD_REF_SLUG-$CI_PIPELINE_ID-$CI_COMMIT_SHORT_SHA
+
+docker-image:
+  stage: build
+  image: docker:18.06
+  tags:
+    - docker
+  only: [ "dev", "master" ]
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker build --build-arg build_command=build -t $CI_PROJECT_PATH -f build/local/Dockerfile .
+    - docker tag $CI_PROJECT_PATH $CI_REGISTRY_IMAGE
+    - docker tag $CI_PROJECT_PATH $CI_REGISTRY_IMAGE:$TAG
+    - docker push $CI_REGISTRY_IMAGE
+    - docker push $CI_REGISTRY_IMAGE:$TAG
+    - docker rmi $CI_PROJECT_PATH
+    - docker rmi $CI_REGISTRY_IMAGE
+    - docker rmi $CI_REGISTRY_IMAGE:$TAG
+
+k8s-deploy-dev:
+  image: gitlab.globerce.com:5050/docker-images/helmsman:3.6.2
+  stage: deploy
+  tags:
+    - docker
+  only: [ "master" ]
+  script:
+    - sed -i "s@ENVIRONMENT@dev@g" manifest-dev.yml
+    - sed -i "s@IMAGE_TO_REPLACE:TAG@$CI_REGISTRY_IMAGE:$TAG@g" manifest-dev.yml
+    - mkdir -p ~/.kube
+    - echo ${KUBECONFIG_DEV} | base64 -d > ~/.kube/config
+    - helm repo update
+    - helmsman -keep-untracked-releases -update-deps -apply -f manifest-dev.yml
+
+k8s-deploy-prod:
+  image: gitlab.globerce.com:5050/docker-images/helmsman:3.6.2
+  stage: deploy
+  tags:
+    - fastcash-prod
+  only: [ "tags" ]
+  when: manual
+  script:
+    - sed -i "s@ENVIRONMENT@prod@g" manifest-prod.yml
+    - sed -i "s@IMAGE_TO_REPLACE:TAG@$CI_REGISTRY_IMAGE:$TAG@g" manifest-prod.yml
+    - mkdir -p ~/.kube
+    - echo ${KUBECONFIG_PROD} | base64 -d > ~/.kube/config
+    - helm repo update
+    - helmsman -keep-untracked-releases -update-deps -apply -f manifest-prod.yml

@@ -1,0 +1,56 @@
+version: '3.9'
+
+volumes:
+  llconveyer_postgres_data: {}
+  llconveyer_postgres_data_backups: {}
+
+x-base:
+  &llconveyer
+  build:
+    context: .
+    dockerfile: build/local/Dockerfile
+  platform: linux/x86_64
+  depends_on:
+    - postgres
+    - redis
+  volumes:
+    - ./src:/src:z
+  env_file:
+    - .env
+
+services:
+  django:
+    <<: *llconveyer
+    ports:
+      - "8000:8000"
+    command: /start
+
+  postgres:
+    image: postgis/postgis:13-3.3
+    volumes:
+      - llconveyer_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  redis:
+    image: redis:6
+
+  celeryworker:
+    <<: *llconveyer
+    depends_on:
+      - redis
+      - postgres
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *llconveyer
+    depends_on:
+      - redis
+      - postgres
+    command: /start-celerybeat
+
+  flower:
+    <<: *llconveyer
+    ports:
+      - "5555:5555"
+    command: /start-celeryflower

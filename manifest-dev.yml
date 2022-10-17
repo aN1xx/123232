@@ -1,0 +1,19 @@
+namespaces:
+  llconveyer:
+
+preconfiguredHelmRepos:
+  - projects
+
+appsTemplates:
+  default-chart: &default-chart
+    namespace: llconveyer
+    enabled: true
+    chart: "projects/default-chart"
+    version: "0.2.6"
+
+apps:
+  llconveyer-dev:
+    <<: *default-chart
+    valuesFile: "k8s/ENVIRONMENT/llconveyer-dev.yml"
+    set:
+      image.name: "IMAGE_TO_REPLACE:TAG"

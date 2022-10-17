@@ -1,0 +1,149 @@
+[
+  {
+    "model": "estimation_methology.methodologysettings",
+    "pk": 1,
+    "fields": {
+      "search_radius": 1000,
+      "search_radius_step": 500,
+      "search_radius_maximum": 3000,
+      "price_anomaly": "{\"bounds\": \"[)\", \"lower\": \"-10\", \"upper\": \"30\"}",
+      "ltv": "1.00"
+    }
+  },
+  {
+    "model": "estimation_methology.areasearchsettings",
+    "pk": 1,
+    "fields": {
+      "input_range": "{\"bounds\": \"()\", \"lower\": null, \"upper\": \"81\"}",
+      "logic_range": null,
+      "percent_range": "{\"bounds\": \"[)\", \"lower\": \"-20\", \"upper\": \"20\"}",
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.areasearchsettings",
+    "pk": 2,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"81\", \"upper\": \"101\"}",
+      "logic_range": null,
+      "percent_range": "{\"bounds\": \"[)\", \"lower\": \"-16\", \"upper\": \"16\"}",
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.areasearchsettings",
+    "pk": 3,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"101\", \"upper\": \"150\"}",
+      "logic_range": null,
+      "percent_range": "{\"bounds\": \"[)\", \"lower\": \"-10\", \"upper\": \"18\"}",
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.yearsearchsettings",
+    "pk": 1,
+    "fields": {
+      "input_range": "{\"bounds\": \"()\", \"lower\": null, \"upper\": \"1969\"}",
+      "logic_range": "{\"bounds\": \"[)\", \"lower\": \"1960\", \"upper\": \"1969\"}",
+      "percent_range": null,
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.yearsearchsettings",
+    "pk": 8,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"1970\", \"upper\": \"1979\"}",
+      "logic_range": "{\"bounds\": \"[)\", \"lower\": \"1970\", \"upper\": \"1979\"}",
+      "percent_range": null,
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.yearsearchsettings",
+    "pk": 9,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"1980\", \"upper\": \"1989\"}",
+      "logic_range": "{\"bounds\": \"[)\", \"lower\": \"1980\", \"upper\": \"1989\"}",
+      "percent_range": null,
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.yearsearchsettings",
+    "pk": 10,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"1990\", \"upper\": \"1999\"}",
+      "logic_range": "{\"bounds\": \"[)\", \"lower\": \"1990\", \"upper\": \"1999\"}",
+      "percent_range": null,
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.yearsearchsettings",
+    "pk": 11,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"2000\", \"upper\": \"2007\"}",
+      "logic_range": "{\"bounds\": \"[)\", \"lower\": \"2000\", \"upper\": \"2007\"}",
+      "percent_range": null,
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.yearsearchsettings",
+    "pk": 12,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"2008\", \"upper\": \"2015\"}",
+      "logic_range": "{\"bounds\": \"[)\", \"lower\": \"2008\", \"upper\": \"2015\"}",
+      "percent_range": null,
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.yearsearchsettings",
+    "pk": 13,
+    "fields": {
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"2016\", \"upper\": \"2030\"}",
+      "logic_range": "{\"bounds\": \"[)\", \"lower\": \"2014\", \"upper\": null}",
+      "percent_range": null,
+      "settings": 1
+    }
+  },
+  {
+    "model": "estimation_methology.bargainsettings",
+    "pk": 1,
+    "fields": {
+      "settings": 1,
+      "input_range": "{\"bounds\": \"()\", \"lower\": null, \"upper\": \"51\"}",
+      "price_change": -3
+    }
+  },
+  {
+    "model": "estimation_methology.bargainsettings",
+    "pk": 2,
+    "fields": {
+      "settings": 1,
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"51\", \"upper\": \"81\"}",
+      "price_change": -5
+    }
+  },
+  {
+    "model": "estimation_methology.bargainsettings",
+    "pk": 3,
+    "fields": {
+      "settings": 1,
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"81\", \"upper\": \"101\"}",
+      "price_change": -7
+    }
+  },
+  {
+    "model": "estimation_methology.bargainsettings",
+    "pk": 4,
+    "fields": {
+      "settings": 1,
+      "input_range": "{\"bounds\": \"[)\", \"lower\": \"101\", \"upper\": null}",
+      "price_change": -10
+    }
+  }
+]

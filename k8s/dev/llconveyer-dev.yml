@@ -1,0 +1,93 @@
+service_name: &service_name llconveyer
+service_port: &service_port 8000
+domain: &domain dev-llconveyer.trafficwave.kz
+secret_tls_name: &secret_tls_name ffin-auto-dev-tls
+
+env:
+  DB_USERNAME: llconveyer_celery
+
+secretEnv: 
+  - secretName: "llconveyer-celery.acid-pgsql-llconveyer-celery.credentials"
+    secretKeys: "password"
+    secretEnvName: "DB_PASSWORD"
+    
+resources:
+  limits:
+    cpu: 1
+    memory: 1024Mi
+  requests:
+    cpu: 0.1
+    memory: 128Mi
+
+replicaCount: 1
+
+rollingUpdate:
+  maxSurge: 1
+  maxUnavailable: 0
+
+nameOverride: *service_name
+fullnameOverride: *service_name
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "5m"
+    nginx.org/client-max-body-size: "5m"
+  hosts:
+    - host: *domain
+      paths:
+        - /
+  tls:
+    - secretName: *secret_tls_name
+      hosts:
+        - *domain
+
+
+service:
+  type: ClusterIP
+  port: *service_port
+  targetPort: *service_port
+
+ports:
+  - name: https
+    port: *service_port
+    targetPort: *service_port
+    protocol: TCP
+
+volumeMounts:
+  - name: llconveyer
+    mountPath: /src/media
+
+volumes:
+  - name: llconveyer
+    persistentVolumeClaim:
+      claimName: llconveyer
+
+livenessProbe:
+  tcpSocket:
+    port: *service_port
+  failureThreshold: 50
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  successThreshold: 1
+  timeoutSeconds: 1
+
+readinessProbe:
+  exec:
+    command:
+      - "sh"
+      - "-c"
+      - "python manage.py wait_for_db"
+  initialDelaySeconds: 10  # Количество секунд от старта контейнера до начала readiness проб.
+  periodSeconds: 10  # Длительность времени (в секундах) между двумя последовательными проведениями проб.
+  timeoutSeconds: 10  # Количество секунд ожидания пробы.
+  failureThreshold: 4  # Когда Pod стартует и проба даёт ошибку, Kubernetes будет пытаться столько раз перед тем, как сдаться.
+
+imagePullSecrets:
+- name: myregistrykey
+
+cronjobs: []
