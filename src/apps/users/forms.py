@@ -1,4 +1,3 @@
-import phonenumber_field.formfields
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -8,19 +7,19 @@ User = get_user_model()
 
 
 class UserCreationForm(forms.ModelForm):
-    phone = phonenumber_field.formfields.PhoneNumberField()
+    username = forms.CharField(max_length=30)
     password = forms.PasswordInput()
 
     class Meta:
         model = User
-        fields = ('phone', 'password')
+        fields = ('username', 'password')
 
     def validate_unique(self) -> None:
         return
 
     def save(self, commit=True):
         return User.objects.create_user(
-            self.cleaned_data['phone'],
+            self.cleaned_data['username'],
             self.cleaned_data['password'],
         )
 
@@ -29,7 +28,7 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserChangeForm(forms.ModelForm):
-    phone = phonenumber_field.formfields.PhoneNumberField()
+    username = forms.CharField(max_length=30)
     password = ReadOnlyPasswordHashField()
     password1 = forms.CharField(
         label='Password',
@@ -44,7 +43,7 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            'phone',
+            'username',
             'password',
             'password1',
             'password2',

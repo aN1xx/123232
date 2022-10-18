@@ -1,6 +1,4 @@
-import phonenumber_field.modelfields
 from django.contrib.auth import models as auth_models
-from django.core.validators import MinLengthValidator
 from django.db import models
 
 
@@ -9,10 +7,10 @@ class UserQueryset(models.QuerySet):
 
 
 class UserManager(auth_models.BaseUserManager.from_queryset(UserQueryset)):
-    def _create_user(self, phone, password):
-        if not phone:
-            raise ValueError('Phone cannot be empty')
-        user = self.model(phone=phone)
+    def _create_user(self, username, password):
+        if not username:
+            raise ValueError('Username cannot be empty')
+        user = self.model(username=username)
         if password is not None:
             user.set_password(password)
         else:
@@ -31,27 +29,25 @@ class UserManager(auth_models.BaseUserManager.from_queryset(UserQueryset)):
     #
     #     return self._create_user(phone, password, **extra_fields)
 
-    def create_user(self, phone, password):
+    def create_user(self, username, password):
         # extra_fields.setdefault('is_staff', False)
         # extra_fields.setdefault('is_superuser', False)
-        return self._create_user(phone, password)
+        return self._create_user(username, password)
 
 
 class User(
     auth_models.PermissionsMixin,
     auth_models.AbstractBaseUser,
 ):
-    phone = phonenumber_field.modelfields.PhoneNumberField(
-        'Mobile phone', unique=True,
-    )
+    username = models.CharField(unique=True, max_length=30)
 
-    USERNAME_FIELD = 'phone'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
 
     def __str__(self):
-        return f'{self.phone}'
+        return f'{self.username}'
 
     class Meta:
         verbose_name = 'User'

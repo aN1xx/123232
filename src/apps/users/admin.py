@@ -13,9 +13,8 @@ class UserAdmin(admin.ModelAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    # list_display = ['phone', 'iin', 'is_superuser']
-    search_fields = ['phone']
-    ordering = ['phone']
+    search_fields = ['username']
+    ordering = ['username']
 
     def get_form(self, request, obj=None, **kwargs):
         defaults = {}
