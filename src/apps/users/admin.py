@@ -13,6 +13,7 @@ class UserAdmin(admin.ModelAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
+    list_display = ['username', 'is_superuser']
     search_fields = ['username']
     ordering = ['username']
 

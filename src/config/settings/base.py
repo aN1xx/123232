@@ -27,13 +27,6 @@ LOCALE_PATHS = [str(ROOT_DIR / 'locale')]
 
 DATABASES = {'default': env.db('DATABASE_URL')}
 
-
-# DATABASES = {'default': {
-#     'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#     'NAME': os.path.join(ROOT_DIR, 'db.postgis'),
-#     }
-# }
-
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
