@@ -12,7 +12,6 @@ x-base:
   platform: linux/x86_64
   depends_on:
     - postgres
-    - redis
   volumes:
     - ./src:/src:z
   env_file:
@@ -31,26 +30,3 @@ services:
       - llconveyer_postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
-
-  redis:
-    image: redis:6
-
-  celeryworker:
-    <<: *llconveyer
-    depends_on:
-      - redis
-      - postgres
-    command: /start-celeryworker
-
-  celerybeat:
-    <<: *llconveyer
-    depends_on:
-      - redis
-      - postgres
-    command: /start-celerybeat
-
-  flower:
-    <<: *llconveyer
-    ports:
-      - "5555:5555"
-    command: /start-celeryflower

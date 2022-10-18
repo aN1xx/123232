@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 import environ
 
@@ -25,6 +26,14 @@ USE_TZ = True
 LOCALE_PATHS = [str(ROOT_DIR / 'locale')]
 
 DATABASES = {'default': env.db('DATABASE_URL')}
+
+
+# DATABASES = {'default': {
+#     'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#     'NAME': os.path.join(ROOT_DIR, 'db.postgis'),
+#     }
+# }
+
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -165,16 +174,6 @@ LOGGING = {
     'root': {'level': 'INFO', 'handlers': ['console']},
 }
 
-if USE_TZ:
-    CELERY_TIMEZONE = TIME_ZONE
-CELERY_BROKER_URL = env('CELERY_BROKER_URL')
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_TIME_LIMIT = 5 * 60
-CELERY_TASK_SOFT_TIME_LIMIT = 60
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

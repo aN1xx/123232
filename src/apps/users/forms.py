@@ -13,7 +13,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('phone', 'password', 'iin')
+        fields = ('phone', 'password')
 
     def validate_unique(self) -> None:
         return
@@ -22,7 +22,6 @@ class UserCreationForm(forms.ModelForm):
         return User.objects.create_user(
             self.cleaned_data['phone'],
             self.cleaned_data['password'],
-            self.cleaned_data['iin'],
         )
 
     def save_m2m(self):
@@ -46,13 +45,9 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = (
             'phone',
-            'iin',
             'password',
             'password1',
             'password2',
-            'is_superuser',
-            'is_staff',
-            'avatar',
         )
 
     def clean_password(self):

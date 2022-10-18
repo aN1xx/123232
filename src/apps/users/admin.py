@@ -13,7 +13,7 @@ class UserAdmin(admin.ModelAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ['phone', 'iin', 'is_superuser']
+    # list_display = ['phone', 'iin', 'is_superuser']
     search_fields = ['phone']
     ordering = ['phone']
 
