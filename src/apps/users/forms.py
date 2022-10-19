@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from rest_framework.authtoken.models import Token
 
 
 User = get_user_model()
@@ -17,11 +18,18 @@ class UserCreationForm(forms.ModelForm):
     def validate_unique(self) -> None:
         return
 
-    def save(self, commit=True):
-        return User.objects.create_user(
-            self.cleaned_data['username'],
-            self.cleaned_data['password'],
-        )
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+
+        user = super().create(validated_data)
+
+        user.set_password(password)
+
+        user.save()
+
+        Token.objects.create(user=user)
+
+        return user
 
     def save_m2m(self):
         return
