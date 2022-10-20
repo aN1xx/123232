@@ -1,15 +1,25 @@
-from django.views.generic import ListView, CreateView
+from rest_framework.views import APIView
+from .models import Sample, Chapter
+from io import BytesIO
+from docx import Document
+from django.http import StreamingHttpResponse
 
-from .models import Document, Chapter
 
-# Home page view
-class Home(ListView):
-    model = Chapter
-    template_name = 'pages/home.html'
-    context_object_name = 'chapters'
 
-class Upload(CreateView):
-    model = Document
-    template_name = 'pages/upload.html'
-    fields = ['file']
-    success_url = '/'
+class ExportDocx(APIView):
+    def get(self, request, *args, **kwargs):
+        document = self.build_document()
+        buffer = BytesIO()
+        document.save(buffer)
+        buffer.seek(0)
+        response = StreamingHttpResponse(
+            streaming_content=buffer,
+            content_type='application/vnd.openxmlformats-'
+                         'officedocument.wordprocessingml.document'
+        )
+        response['Content-Disposition'] = 'attachment;filename=Test.docx'
+        response["Content-Encoding"] = 'UTF-8'
+        return response
+
+    def build_document(self):
+        pass
