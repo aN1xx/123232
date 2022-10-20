@@ -1,8 +1,6 @@
 from django.db import models
 from django.dispatch import receiver
 
-from .utils import import_docx, delete_docx
-
 
 class Sample(models.Model):
     file = models.FileField(upload_to='samples', max_length=100000, null=True)
@@ -19,22 +17,3 @@ class Chapter(models.Model):
 
     class Meta:
         app_label = 'documentconverter'
-
-
-# Set signal to delete all document objects and it's files when another one is created
-@receiver(models.signals.pre_save, sender=Sample)
-def delete_older_documents(sender, instance, **kwargs):
-    documents = Sample.objects.all()
-    if documents:
-        for doc in documents:
-            delete_docx(doc)
-        Chapter.objects.all().delete()
-        documents.delete()
-
-
-# Set signal for importing .docx after uploading it
-@receiver(models.signals.post_save, sender=Sample)
-def create_document(sender, instance, **kwargs):
-    import_docx(Chapter, instance)
-    # Clear all blank chapters after every import
-    Chapter.objects.filter(title='').delete()

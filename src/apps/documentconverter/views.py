@@ -5,7 +5,6 @@ from docx import Document
 from django.http import StreamingHttpResponse
 
 
-
 class ExportDocx(APIView):
     def get(self, request, *args, **kwargs):
         document = self.build_document()
@@ -22,4 +21,6 @@ class ExportDocx(APIView):
         return response
 
     def build_document(self):
-        pass
+        document = Document()
+        document.render(Chapter.objects)
+        return document

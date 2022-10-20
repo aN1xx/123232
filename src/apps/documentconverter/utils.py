@@ -75,17 +75,3 @@ def import_docx(Model, doc):
     # Save the remaining object
     obj.text = text
     obj.save()
-
-
-# Delete .docx document and it's image folder
-def delete_docx(doc):
-    if doc.file:
-        if os.path.exists(doc.file.path):
-            os.remove(doc.file.path)
-    img_dir = os.path.join(MEDIA_ROOT, 'images')
-    for root, dirs, files in os.walk(img_dir, topdown=False):
-        for name in files:
-            os.remove(os.path.join(root, name))
-        for name in dirs:
-            os.rmdir(os.path.join(root, name))
-

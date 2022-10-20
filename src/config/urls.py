@@ -12,6 +12,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from apps.documentconverter.views import ExportDocx
 
 
 urlpatterns = [
@@ -29,6 +30,7 @@ if settings.DEBUG:
 urlpatterns += [
     # API base url
     path('api/', include('config.api_router')),
+    path('api/v1/download/', ExportDocx.as_view()),
     path('api/token/create', TokenObtainPairView.as_view(), name='jwt_create'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
