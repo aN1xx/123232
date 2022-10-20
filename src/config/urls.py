@@ -12,6 +12,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from apps.documentconverter.views import (
+    Home,
+    Upload
+)
 
 
 urlpatterns = [
@@ -27,6 +31,8 @@ if settings.DEBUG:
 
 # API URLS
 urlpatterns += [
+    path('home/', Home.as_view(), name='home'),
+    path('upload/', Upload.as_view(), name='upload'),
     # API base url
     path('api/', include('config.api_router')),
     path('api/token/create', TokenObtainPairView.as_view(), name='jwt_create'),
