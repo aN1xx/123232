@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
-from .models import Sample, Chapter
+from .models import Sample
 from io import BytesIO
 from docx import Document
 from django.http import StreamingHttpResponse
+from django.forms.models import model_to_dict
 
 
 class ExportDocx(APIView):
@@ -21,6 +22,8 @@ class ExportDocx(APIView):
         return response
 
     def build_document(self):
-        document = Document()
-        document.render(Chapter.objects)
+        document = Document("inviteTmpl.docx")
+        context = Sample.objects.get(id=1)
+        u_context = model_to_dict(context)
+        document.render(u_context)
         return document
